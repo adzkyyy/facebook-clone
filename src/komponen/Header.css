@@ -64,6 +64,7 @@
 }
 .header_info > h4 {
   margin-left: 10px;
+  cursor: pointer;
 }
 .header_right {
   display: flex;
