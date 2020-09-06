@@ -4,24 +4,39 @@ import { Avatar } from "@material-ui/core";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
+import { useStateValue } from "../StateProvider";
+import db from "../firebase";
+import firebase from "firebase";
 
 function MessegeSender() {
+  const [{ user }, dispatch] = useStateValue();
   const [input, setInput] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const handleSubmit = (e) => {
-    e.prefentDefault();
+    e.preventDefault();
+
+    db.collection("posts").add({
+      message: input,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      profilePict: user.photoURL,
+      username: user.displayName,
+      image: imageUrl,
+    });
+
+    setInput("");
+    setImageUrl("");
   };
 
   return (
     <div className="messageSender">
       <div className="messageSender_top">
-        <Avatar src="https://pbs.twimg.com/profile_images/1290221793702109184/0G3p5kkY_400x400.jpg  " />
+        <Avatar src={user.photoURL} />
         <form>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             className="messageSender_input"
-            placeholder={"apa yang terjadi?"}
+            placeholder="apa yang terjadi?"
           />
           <input
             value={imageUrl}

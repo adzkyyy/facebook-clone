@@ -1,29 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Feed.css";
 import StoryReal from "./StoryReal";
 import MessageSender from "../asset/MessegeSender";
 import Post from "./Post";
+import db from "../firebase";
 
 function Feed() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    db.collection("posts")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) =>
+        setPosts(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })))
+      );
+  }, []);
+
   return (
     <div className="feed">
       <StoryReal />
       <MessageSender />
-      <Post
-        profilePict="https://ents24.imgix.net/image/000/199/027/1e87a50cc9aef99e34d54fa5fbcf1ad527a95e45.jpg?auto=format&fit=crop&crop=faces&w=1081.5&h=1575&vib=50&q=50"
-        message="mantap"
-        timeStamp="initime"
-        username="Zayn"
-        image="https://www.goodnewsfromindonesia.id/uploads/post/large-suporter-e583d7bffeb6a4260cb3dfef3f74e0de.jpg"
-      />
-      <Post
-        profilePict="https://ents24.imgix.net/image/000/199/027/1e87a50cc9aef99e34d54fa5fbcf1ad527a95e45.jpg?auto=format&fit=crop&crop=faces&w=1081.5&h=1575&vib=50&q=50"
-        image="https://www.goodnewsfromindonesia.id/uploads/post/large-suporter-e583d7bffeb6a4260cb3dfef3f74e0de.jpg"
-      />
-      <Post
-        profilePict="https://ents24.imgix.net/image/000/199/027/1e87a50cc9aef99e34d54fa5fbcf1ad527a95e45.jpg?auto=format&fit=crop&crop=faces&w=1081.5&h=1575&vib=50&q=50"
-        image="https://www.goodnewsfromindonesia.id/uploads/post/large-suporter-e583d7bffeb6a4260cb3dfef3f74e0de.jpg"
-      />
+
+      {posts.map((post) => (
+        <Post
+          key={post.id}
+          profilePict={post.data.profilePict}
+          message={post.data.message}
+          timestamp={post.data.timestamp}
+          username={post.data.username}
+          image={post.data.image}
+        />
+      ))}
     </div>
   );
 }

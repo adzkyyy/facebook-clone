@@ -5,16 +5,17 @@ import ThumbUp from "@material-ui/icons/ThumbUp";
 import Chat from "@material-ui/icons/ChatBubble";
 import NearMe from "@material-ui/icons/NearMe";
 import { ExpandMoreOutlined } from "@material-ui/icons";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import "./Feed";
 
-function Post({ profilePict, image, username, timeStamp, message }) {
+function Post({ profilePict, image, username, timestamp, message }) {
   return (
     <div className="post">
       <div className="post_top">
         <Avatar src={profilePict} className="post_avatar" />
         <div className="post_topInfo">
           <h3>{username}</h3>
-          <p>asmasa</p>
+          <p>{new Date(timestamp?.toDate()).toUTCString()}</p>
         </div>
       </div>
 
@@ -36,6 +37,10 @@ function Post({ profilePict, image, username, timeStamp, message }) {
         <div className="post_option">
           <NearMe />
           <p>kerrren</p>
+        </div>
+        <div className="post_option">
+          <AccountCircle />
+          <ExpandMoreOutlined />
         </div>
       </div>
     </div>
